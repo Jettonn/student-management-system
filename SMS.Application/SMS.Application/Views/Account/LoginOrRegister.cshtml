@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Kyçu";
+    Layout = "_LayoutLogin";
+}
+<div class="container" id="container" style="top:50%;left:50%;transform: translate(-50%, -50%);">
+    <div class="form-container sign-up-container">
+        <form method="post">
+            <h1>Create Account</h1>
+            <span>Enter your information</span>
+            @*<div class="required" asp-validation-summary="All"></div>*@
+            <input type="text" placeholder="Name" required/>
+            <input type="text" placeholder="Lastname" required/>
+            <input type="text" placeholder="Username" required/>
+            <input type="password" placeholder="Password" required/>
+            <input type="password" placeholder="Confirm Password" required />
+            <span class="required"></span>
+            <button type="submit" style="cursor:pointer">Sign Up</button>
+        </form>
+    </div>
+    <div class="form-container sign-in-container">
+        <form method="post" autocomplete="on">
+            <h1>Sign in</h1>
+            <span>or use your account</span>
+            @*<div class="required" asp-validation-summary="All"></div>*@
+            <input type="text" placeholder="Username" required />
+            <span class="required"></span>
+            <input type="password" placeholder="Password" required />
+            <span class="required"></span>
+            <a href="#">Forgot your password?</a>
+            <button type="submit" style="cursor:pointer">Sign In</button>
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>To keep connected with us please login with your personal info</p>
+                <button class="ghost" id="signIn"  style="cursor:pointer">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Hello, Professor!</h1>
+                <p>Enter your personal details and start journey with us</p>
+                <button class="ghost" id="signUp"  style="cursor:pointer">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
