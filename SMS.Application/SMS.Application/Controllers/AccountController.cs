@@ -17,5 +17,6 @@ namespace SMS.Application.Controllers
             }
             return View();
         }
+
     }
 }
