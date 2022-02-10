@@ -20,5 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" asp-append-version="true"></script>
     <!-- Custom scripts for all pages-->
     <script src="~/js/login.js"></script>
+    @await Component.InvokeAsync("NToastNotify")
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

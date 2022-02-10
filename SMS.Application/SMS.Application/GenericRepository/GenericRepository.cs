@@ -1,24 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SistemiPerMenaxhiminEVijueshmerise.GenericRepository;
-using SMS.Application.Data;
+using SMS.Application.GenericRepository;
+using SMS.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SMS.Application.wwwroot.GenericRepository
+namespace SMS.Application.GenericRepository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private SMSDatabaseContext _context = null;
+        private masterContext _context = null;
         private DbSet<T> table = null;
         public GenericRepository()
         {
-            this._context = new SMSDatabaseContext();
+            this._context = new masterContext();
             table = _context.Set<T>();
         }
-        public GenericRepository(SMSDatabaseContext _context)
+        public GenericRepository(masterContext _context)
         {
             this._context = _context;
             table = _context.Set<T>();

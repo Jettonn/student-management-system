@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,7 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using NToastNotify;
+using SMS.Application.GenericRepository;
+using SMS.Application.Interfaces;
 using SMS.Application.Models;
+using SMS.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,7 +37,21 @@ namespace SMS.Application
             services.AddSingleton<IFileProvider>(
             new PhysicalFileProvider(
                 Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
-            services.AddControllersWithViews();
+            //cookie authorization
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/LoginOrRegister";
+                    options.Cookie.Name = "s7uden7j3tooncad1";
+                });
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUserService, UserService>();
+            services.AddMvc().AddNToastNotifyToastr(new ToastrOptions()
+            {
+                ProgressBar = false,
+                PositionClass = ToastPositions.BottomCenter
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +67,7 @@ namespace SMS.Application
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseNToastNotify();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
