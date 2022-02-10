@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SistemiPerMenaxhiminEVijueshmerise.GenericRepository;
 using SMS.Application.Data;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SMS.Application.wwwroot.GenericRepository
 {
-    public class GenericRepository
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private SMSDatabaseContext _context = null;
         private DbSet<T> table = null;
