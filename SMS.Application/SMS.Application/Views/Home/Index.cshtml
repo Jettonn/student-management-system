@@ -1,8 +1,118 @@
-﻿@{
+@model SMS.Application.ViewModels.Home.HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row mb-3">
+    <div class="col-md-12 mb-3 position_end">
+        <a type="button" asp-controller="" asp-action="" class="btn" style="background-color:#30694d; color:white;">Start a lesson</a>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card border-light shadow">
+            <div class="body">
+                <div class="col-md-12">
+                    <div class="row" style="padding:20px 10px;">
+                        <div class="col-sm-5 col-md-12 col-lg-5 text-center"><i class="fas fa-user-graduate" style="font-size:350%;"></i></div>
+                        <div class="col-sm-7 col-md-12 col-lg-7">
+                            <div class="text-muted text-center">Students</div>
+                            <div class="text-center" style="font-size:25px;">Test</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-light shadow">
+            <div class="body">
+                <div class="col-md-12">
+                    <div class="row" style="padding:20px 10px;">
+                        <div class="col-sm-5 col-md-12 col-lg-5 text-center"><i class="fas fa-book" style="font-size:350%;"></i></div>
+                        <div class="col-sm-7 col-md-12 col-lg-7">
+                            <div class="text-muted text-center">Subjects</div>
+                            <div class="text-center" style="font-size:25px;">Test</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-light shadow">
+            <div class="body">
+                <div class="col-md-12">
+                    <div class="row" style="padding:20px 10px;">
+                        <div class="col-sm-5 col-md-12 col-lg-5 text-center"><i class="fas fa-chalkboard-teacher" style="font-size:350%;"></i></div>
+                        <div class="col-sm-7 col-md-12 col-lg-7">
+                            <div class="text-muted text-center">Classes</div>
+                            <div class="text-center" style="font-size:25px;">Test</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-light shadow">
+            <div class="body">
+                <div class="col-md-12">
+                    <div class="row" style="padding:20px 10px;">
+                        <div class="col-sm-5 col-md-12 col-lg-5 text-center"><i class="fas fa-table" style="font-size:350%;"></i></div>
+                        <div class="col-sm-7 col-md-12 col-lg-7">
+                            <div class="text-muted text-center">Projects</div>
+                            <div class="text-center" style="font-size:25px;">Test</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6 mb-3">
+        <div class="card border-light shadow">
+            <div class="body">
+                <div class="col-md-12">
+                    <div class="row" style="padding:20px 10px;">
+                        <div class="col-md-12">
+                            <div class="text-muted text-center">Students</div>
+                            <canvas id="bar-chart" width="800" height="450"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card border-light shadow">
+            <div class="body">
+                <div class="col-md-12">
+                    <div class="row" style="padding:20px 10px;">
+                        <div class="col-md-12">
+                            <div class="text-muted text-center">Students</div>
+                            <canvas id="doughnut-chart" width="800" height="450"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row center_all">
+    <div class="col-md-6 mb-3">
+        <div class="card border-light shadow">
+            <div class="body">
+                <div class="col-md-12">
+                    <div class="row" style="padding:20px 10px;">
+                        <div class="col-md-12">
+                            <div class="text-muted text-center">Classes</div>
+                            <canvas id="bar-chart-classes" width="800" height="450"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
