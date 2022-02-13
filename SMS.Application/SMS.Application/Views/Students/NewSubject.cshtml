@@ -1,0 +1,151 @@
+﻿@model SMS.Application.ViewModels.Subjects.NewSubjectViewModel
+@using SMS.Application.Enum
+@{
+    ViewData["Title"] = "NewSubject";
+}
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item"><a class="text-muted">Subjects</a></li>
+            <li class="breadcrumb-item active" aria-current="page">New subject</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 margin_left15px">
+                    <h4 class="text-maincolor">New subject</h4>
+                </div>
+                <form method="post" asp-controller="Subjects" asp-action="NewSubject" class="formWidth_100">
+                    <div class="col-md-12 pt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="subjectName">Subject Name<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="subjectName" placeholder="Enter subject Name" asp-for="SubjectName" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="subjectComment">Subject Comment</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <textarea class="form-control" id="subjectComment" placeholder="Enter subject comment" rows="3" asp-for="SubjectComment"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="fname">Subject Type<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-5" style="padding-left:20px;">
+                                                    <input class="form-check-input" type="radio" asp-for="SubjectType" id="obligative" value="@((int)SubjectTypes.Obligatory)" checked>
+                                                    <label class="form-check-label" for="obligative">
+                                                        @SubjectTypes.Obligatory
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-5" style="padding-left:20px;">
+                                                    <input class="form-check-input" type="radio" asp-for="SubjectType" id="zgjedhore" value="@((int)SubjectTypes.Optional)">
+                                                    <label class="form-check-label" for="zgjedhore">
+                                                        @SubjectTypes.Optional
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="weeklyPlannedHours">Weekly planned hours</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="number" class="form-control" id="weeklyPlannedHours" min="0" max="10" value="2" asp-for="NumberOfHours">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="yearOfStudies">Year of studies<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <select class="browser-default custom-select" asp-items="Html.GetEnumSelectList<YearOfStudies>()" asp-for="YearOfStudies" required>
+                                                    <option selected="" value="-1">Please select one</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="Semester">Semester<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <select class="browser-default custom-select" asp-items="Html.GetEnumSelectList<Semesters>()" asp-for="Semester" required>
+                                                    <option selected="" value="-1">Please select one</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="classColor">Color</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div id="cp-component" class="input-group">
+                                            <input type="text" class="form-control input-lg" value="#30694d" asp-for="Color" />
+                                            <span class="input-group-append">
+                                                <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                            </span>
+                                            <small class="text-muted">Please select brighter colors and try to avoid selecting white and black!</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 margin_left15px">
+                        <button type="submit" class="btn btn-outline-dark">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#cp-component').colorpicker();
+        });
+    </script>
+}
