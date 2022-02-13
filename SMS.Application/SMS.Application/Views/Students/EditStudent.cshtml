@@ -1,0 +1,115 @@
+﻿@using SMS.Application.Enum
+@model SMS.Application.ViewModels.Students.EditStudent
+@{
+    ViewData["Title"] = "Edit Student";
+}
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Students" asp-action="StudentsList" class="text-muted">Students</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit student</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-12 margin_left15px">
+                    <h4 class="text-maincolor">New student</h4>
+                </div>
+                <form method="post" asp-controller="Students" asp-action="EditStudent" class="formWidth_100">
+                    <div class="form-group" style="visibility:hidden; display:none;">
+                        <label asp-for="StudentId" class="control-label"></label>
+                        <input asp-for="StudentId" class="form-control" />
+                    </div>
+                    <div class="col-md-12 pt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="firstname">First name<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="firstname" placeholder="Enter first name" asp-for="Firstname" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="lastname">Last name<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="lastname" placeholder="Enter last name" asp-for="Lastname" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="gender">Gender<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-5" style="padding-left:20px;">
+                                                    <input class="form-check-input" type="radio" asp-for="Gender" id="male" value="@((int)Gender.Male)" checked>
+                                                    <label class="form-check-label" for="male">
+                                                        M
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-5" style="padding-left:20px;">
+                                                    <input class="form-check-input" type="radio" asp-for="Gender" id="female" value="@((int)Gender.Female)">
+                                                    <label class="form-check-label" for="female">
+                                                        F
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="email">Email<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="email" class="form-control" id="email" placeholder="Enter student email" asp-for="Email" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="yearOfStudies">Year of studies<span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <select class="browser-default custom-select" asp-items="Html.GetEnumSelectList<YearOfStudies>()" asp-for="YearOfStudies" required>
+                                                    <option selected="" value="-1">Please select one</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 margin_left15px">
+                        <a class="btn btn-light" asp-controller="Students" asp-action="StudentsList">Cancel</a>
+                        <button type="submit" class="btn btn-warning">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

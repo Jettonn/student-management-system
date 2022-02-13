@@ -457,7 +457,14 @@ body.dark .logo img {
 }
 
 .logo-image {
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     overflow: hidden;
     margin-top: -6px;
+}
+
+.breadcrumb {
+    background-color: #f6f5f7 !important;
+    padding-left: 0px !important;
 }
