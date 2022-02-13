@@ -17,7 +17,7 @@ namespace SMS.Application.Data
         {
         }
 
-        public virtual DbSet<Proffesor> Proffesors { get; set; }
+        public virtual DbSet<Professors> Proffesors { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -32,7 +32,7 @@ namespace SMS.Application.Data
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Proffesor>(entity =>
+            modelBuilder.Entity<Professors>(entity =>
             {
                 entity.Property(e => e.ProffesorId)
                     .ValueGeneratedNever()
