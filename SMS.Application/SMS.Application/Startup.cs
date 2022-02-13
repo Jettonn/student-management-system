@@ -48,6 +48,7 @@ namespace SMS.Application
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<ISubjectsViewService, SubjectsService>();
             services.AddMvc().AddNToastNotifyToastr(new ToastrOptions()
             {
                 ProgressBar = false,
