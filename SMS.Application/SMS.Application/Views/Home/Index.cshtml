@@ -7,17 +7,6 @@
     <div class="col-md-12 mb-3 position_end">
         <a type="button" asp-controller="Lesson" asp-action="StartLesson" class="btn" style="background-color:#30694d; color:white;">Start a lesson</a>
     </div>
-    @*<div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
-                </div>
-            </div>
-        </div>*@
 
     <div class="col-md-3 mb-3">
         <div class="card border-light shadow">
@@ -27,7 +16,7 @@
                         <div class="col-sm-5 col-md-12 col-lg-5 text-center"><i class="fas fa-user-graduate" style="font-size:350%;"></i></div>
                         <div class="col-sm-7 col-md-12 col-lg-7">
                             <div class="text-muted text-center">Students</div>
-                            <div class="text-center" style="font-size:25px;">@*@Model.Students*@</div>
+                            <div class="text-center" style="font-size:25px;">@Model.Students</div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +31,7 @@
                         <div class="col-sm-5 col-md-12 col-lg-5 text-center"><i class="fas fa-book" style="font-size:350%;"></i></div>
                         <div class="col-sm-7 col-md-12 col-lg-7">
                             <div class="text-muted text-center">Subjects</div>
-                            <div class="text-center" style="font-size:25px;">@*@Model.Subjects*@</div>
+                            <div class="text-center" style="font-size:25px;"></div>
                         </div>
                     </div>
                 </div>
@@ -57,7 +46,7 @@
                         <div class="col-sm-5 col-md-12 col-lg-5 text-center"><i class="fas fa-chalkboard-teacher" style="font-size:350%;"></i></div>
                         <div class="col-sm-7 col-md-12 col-lg-7">
                             <div class="text-muted text-center">Classes</div>
-                            <div class="text-center" style="font-size:25px;">@*@Model.Classes*@</div>
+                            <div class="text-center" style="font-size:25px;">@Model.Subjects</div>
                         </div>
                     </div>
                 </div>
@@ -72,7 +61,7 @@
                         <div class="col-sm-5 col-md-12 col-lg-5 text-center"><i class="fas fa-table" style="font-size:350%;"></i></div>
                         <div class="col-sm-7 col-md-12 col-lg-7">
                             <div class="text-muted text-center">Projects</div>
-                            <div class="text-center" style="font-size:25px;">@*@Model.Projects*@</div>
+                            <div class="text-center" style="font-size:25px;">@Model.Classes</div>
                         </div>
                     </div>
                 </div>
@@ -127,84 +116,3 @@
         </div>
     </div>
 </div>
-@*@section Scripts{
-    <script>
-        new Chart(document.getElementById("bar-chart"), {
-            type: 'bar',
-            data: {
-                labels: ["Male", "Female"],
-                datasets: [
-                    {
-                        label: "Students",
-                        backgroundColor: ["#1266F1", "#F93154"],
-                        data: [@Model.StudentsMale,@Model.StudentsFemale]
-                    }
-                ]
-            },
-            options: {
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: 'Students gender'
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
-    <script>
-        new Chart(document.getElementById("doughnut-chart"), {
-            type: 'doughnut',
-            data: {
-                labels: ["First", "Second", "Third"],
-                datasets: [
-                    {
-                        label: "Students Year",
-                        backgroundColor: ["#00B74A", "#003f5c", "#ffa600"],
-                        data: [@Model.StudentsFirstYear, @Model.StudentsSecondYear, @Model.StudentsThirdYear]
-                    }
-                ]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Number of students in each year of studies'
-                }
-            }
-        });
-    </script>
-    <script>
-        new Chart(document.getElementById("bar-chart-classes"), {
-            type: 'bar',
-            data: {
-                labels: ["First", "Second", "Third"],
-                datasets: [
-                    {
-                        label: "Classes",
-                        backgroundColor: ["#f05454","#222831", "#ffd369"],
-                        data: [@Model.ClassesFirstYear,@Model.ClassesSecondYear,@Model.ClassesThirdYear]
-                    }
-                ]
-            },
-            options: {
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: 'Number of classes on each year of studies'
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
-}*@

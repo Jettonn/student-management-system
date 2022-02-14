@@ -1,0 +1,89 @@
+﻿@model List<SMS.Application.Models.Subject>
+@using SMS.Application.Enum
+@{
+    ViewData["Title"] = "ShowAllSubjects";
+}
+
+@*Modal for delete confirmation*@
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted">Delete Subject</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to Remove this Subject?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-light" data-dismiss="modal">Cancel</a>
+                <a href="#" class="btn btn-danger" onclick="DeleteSubject()">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for delete confirmation*@
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item"><a class="text-muted">Subjects</a></li>
+            <li class="breadcrumb-item active" aria-current="page">All Subjects</li>
+        </ul>
+    </div>
+    <div class="mb-4">
+        <h3 class="text-dark">All subjects</h3>
+    </div>
+    <div class="row">
+        @{
+            foreach (var subject in Model)
+            {
+                <div class="col-md-4" id="subjectCard_@subject.SubjectId">
+                    <div class="card border-light shadow mb-3">
+                        <div class="card-body card-body-cascade text-center">
+                            <h4 class="card-title"><strong>@subject.SubjectName</strong></h4>
+                            <h6 class="text-muted pb-2"><strong>@((SubjectTypes)subject.SubjectType)</strong></h6>
+                            <p class="card-text">@subject.Comment</p>
+                            <ul class="list-group list-group-flush mb-3 text-muted" style="font-size:13px;">
+                                <li class="list-group-item">Year of studies: @((YearOfStudiesShow)subject.YearOfStudies)</li>
+                                <li class="list-group-item">Semester: @((SemestersShow)subject.Semester)</li>
+                                <li class="list-group-item">Weekly planned hours: @subject.NumberOfHours</li>
+                            </ul>
+                            <a class="px-2 text-warning cursor_point" href="@Url.ActionLink("EditSubject", "Subjects", new { subjectId = subject.SubjectId })"><i class="fas fa-pen fa-lg"></i></a>
+                            <a class="px-2 text-danger cursor_point" onclick='ConfirmDelete("@subject.SubjectId")'><i class="fas fa-trash fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            }
+            @*hidden field for storing current subjectId*@
+            <input type="hidden" id="hiddenSubjectId" />
+        }
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        var ConfirmDelete = function (SubjectId) {
+            $("#hiddenSubjectId").val(SubjectId);
+            $("#myModal").modal('show');
+        }
+
+        var DeleteSubject = function () {
+            var subjectId = $("#hiddenSubjectId").val();
+            $.ajax({
+                type: "POST",
+                url: "/Subjects/DeleteSubject",
+                data: { subjectId: subjectId },
+                success: function (result) {
+                    $("#myModal").modal("hide");
+                    $("#subjectCard_" + subjectId).remove();
+                },
+                error: function (xhr) {
+                    alert('Student could not deleted due to an error in server!');
+                }
+            })
+        }
+    </script>
+}

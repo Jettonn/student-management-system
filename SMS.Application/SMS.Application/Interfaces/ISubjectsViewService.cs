@@ -9,5 +9,7 @@ namespace SMS.Application.Interfaces
     public interface ISubjectsViewService
     {
         public void AddSubject(NewSubjectViewModel model, Guid professorId);
+        public void EditSubject(EditSubjectViewModel model);
+
     }
 }
