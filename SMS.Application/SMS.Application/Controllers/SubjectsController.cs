@@ -18,19 +18,21 @@ namespace SMS.Application.Controllers
         private readonly IToastNotification toastNotification;
         private readonly IGenericRepository<Professor> professorRepository;
         private readonly IGenericRepository<Subject> subjectRepository;
-        public IActionResult Index()
-        {
-            return View();
-        }
         public SubjectsController(ISubjectsViewService subjectsViewService,
-                            IToastNotification toastNotification,
-                            IGenericRepository<Professor> professorRepository,
-                            IGenericRepository<Subject> subjectRepository)
+                                    IToastNotification toastNotification,
+                                    IGenericRepository<Professor> professorRepository,
+                                    IGenericRepository<Subject> subjectRepository)
         {
             this.subjectsViewService = subjectsViewService;
             this.toastNotification = toastNotification;
             this.professorRepository = professorRepository;
             this.subjectRepository = subjectRepository;
+        }
+
+        [Authorize]
+        public IActionResult NewSubject()
+        {
+            return View();
         }
 
         public async Task<IActionResult> NewSubject(NewSubjectViewModel model)
@@ -55,6 +57,7 @@ namespace SMS.Application.Controllers
                 return View(model);
             }
         }
+
         [Authorize]
         [HttpGet]
         public IActionResult ShowAllSubjects()
@@ -78,6 +81,7 @@ namespace SMS.Application.Controllers
             model.Color = subject.Color;
             return View(model);
         }
+
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
