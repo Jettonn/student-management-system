@@ -1,0 +1,409 @@
+﻿@model SMS.Application.ViewModels.Classes.EditClassViewModel
+@using SMS.Application.Enum
+@{
+    ViewData["Title"] = "EditClass";
+}
+@{
+    var maxValue = 100 - Model.editClassDto.TotalPoints;
+}
+@*Modal for Edit*@
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted">Edit Evaluation</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                @*hidden field for storing current subjectId*@
+                <input type="hidden" id="hiddenEvaluationId" />
+                <div class="row" id="otherExercises">
+                    <form id="editEvaluation" class="formWidth_100">
+                        <div class="form-group" style="visibility:hidden; display:none;">
+                            <input id="oldEvaluationPercentage" class="form-control" />
+                        </div>
+                        <div class="form-group" style="visibility:hidden; display:none;">
+                            <input asp-for="editEvaluationDto.ClassEvaluationId" id="evaluationId" class="form-control" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="exercise">Name</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="evaluationName" required asp-for="editEvaluationDto.Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="exerciseEvaluation">Percentage</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="number" class="form-control numberbox" id="evaluationPercentage" min="1" required asp-for="editEvaluationDto.Percentage">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-light" data-dismiss="modal">Cancel</a>
+                <a href="#" class="btn btn-danger" onclick="EditEvaluation()">Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for Edit*@
+
+
+@*Modal for delete confirmation*@
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted">Delete Evaluation</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                @*hidden field for storing current subjectId*@
+                <input type="hidden" id="hiddenEvaluationId" />
+                <p>Are you sure you want to Remove this Evaluation?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-light" data-dismiss="modal">Cancel</a>
+                <a href="#" class="btn btn-danger" onclick="DeleteSubject()">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for delete confirmation*@
+
+
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item"><a class="text-muted">Class</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit class</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 margin_left15px">
+                    <h4 class="text-maincolor">New class</h4>
+                </div>
+                <form method="post" asp-controller="Classes" asp-action="EditClass" class="formWidth_100">
+                    <div class="form-group" style="visibility:hidden; display:none;">
+                        <input asp-for="editClassDto.ClassId" class="form-control" />
+                    </div>
+                    <div class="form-group" style="visibility:hidden; display:none;">
+                        <input asp-for="editClassDto.TotalPoints" class="form-control" id="totalPoints" />
+                    </div>
+                    <div class="col-md-12 pt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="className">Class name</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="className" asp-for="editClassDto.ClassName" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="comment">Comment</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <textarea class="form-control rounded-0" id="comment" rows="3" asp-for="editClassDto.ClassComment"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="subject">Subject</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <select class="browser-default custom-select" asp-items="@Model.editClassDto.Subjects" asp-for="editClassDto.Subject" disabled>
+                                                    <option selected="" value="-1">Please select one</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="classHours">Class hours</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="number" class="form-control" id="classHours" min="0" max="100" value="@Model.editClassDto.ClassHours" readonly asp-for="editClassDto.ClassHours">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Save changes!</strong> If you change the comment for Class don't forget to click the Save button!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-outline-dark">Save</button>
+                        </div>
+                </form>
+                <div class="col-md-12">
+                    <hr />
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-8 vertical_align_text"><h5>Class evaluation</h5></div>
+                        <div class="col-md-4 position_end">
+                            <div class="col-md-6 p-0">
+                                <div class="card text-white bg-dark p-2 center_all">
+                                    <p style="font-size:14px; margin-bottom:0"><span id="totalPoints">@Model.editClassDto.TotalPoints</span>/100 points</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <div class="card border-light shadow mb-3 bg-dark">
+                        <div class="card-body text-white font-weight-bold">
+                            <div class="row">
+                                <div class="col-md-3">Name</div>
+                                <div class="col-md-3">Percentage</div>
+                                <div class="col-md-3">Type</div>
+                                <div class="col-md-3">Actions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @{
+                    foreach (var evaluation in Model.editClassDto.EvaluationDtos)
+                    {
+                        if (evaluation.Type == (int)EvaluationType.Project)
+                        {
+                            <div class="col-md-12 mt-2">
+                                <div class="card border-light shadow mb-4 bg-white" id="evaluation_@evaluation.ClassEvaluationId">
+                                    <div class="card-body text-muted">
+                                        <div class="row">
+                                            <div class="col-md-3">@evaluation.Name</div>
+                                            <div class="col-md-3">@evaluation.Percentage</div>
+                                            <div class="col-md-3">@((EvaluationType)evaluation.Type)</div>
+                                            <div class="col-md-3">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <a class="text-warning cursor_point" onclick='Edit("@evaluation.ClassEvaluationId","@evaluation.Name","@evaluation.Percentage")'><i class="fas fa-pen"></i></a>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <a class="text-danger cursor_point" onclick='ConfirmDelete("@evaluation.ClassEvaluationId")'><i class="fas fa-trash"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-12 mt-2" id="evaluation_@evaluation.ClassEvaluationId">
+                                <div class="card border-light shadow mb-4 bg-white">
+                                    <div class="card-body text-muted">
+                                        <div class="row">
+                                            <div class="col-md-3">@evaluation.Name</div>
+                                            <div class="col-md-3">@evaluation.Percentage</div>
+                                            <div class="col-md-3">@((EvaluationType)evaluation.Type)</div>
+                                            <div class="col-md-3">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <a class="text-warning cursor_point" onclick='Edit("@evaluation.ClassEvaluationId","@evaluation.Name","@evaluation.Percentage")'><i class="fas fa-pen"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    }
+                }
+                @{
+                    if (Model.editClassDto.TotalPoints != 100)
+                    {
+                        <div class="col-md-12">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Other evaluations!</strong> Now you can add and edit other evaluations.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" id="otherEvaluationsCard">
+                            <div class="card border-light shadow-lg mb-3 mt-3">
+                                <div class="card-body card-body-cascade">
+                                    <div class="col-md-12">
+                                        <h6 class="card-title"><strong>Other evaluations</strong></h6>
+                                    </div>
+                                    <form method="post" asp-controller="Classes" asp-action="AddNewEvaluation" class="formWidth_100">
+                                        <div class="row" id="otherExercises">
+                                            <div class="form-group" style="visibility:hidden; display:none;">
+                                                <input asp-for="addOtherEvaluations.ClassId" value="@Model.editClassDto.ClassId" class="form-control" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <label class="control-label" for="exercise">Name</label>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <input type="text" class="form-control" id="exercise" placeholder="Enter other evaluation name" required asp-for="addOtherEvaluations.Name">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <label class="control-label" for="exerciseEvaluation">Percentage</label>
+                                                    </div>
+
+                                                    <div class="col-sm-12">
+                                                        <input type="number" class="form-control numberbox" id="exerciseEvaluation" min="1" max="@maxValue" required asp-for="addOtherEvaluations.Percentage">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 position_end">
+                                            <button type="submit" class="btn btn-outline-success"><i class="fas fa-plus"></i> Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            var totalPoints = parseInt($('#totalPoints').val());
+            $('#exerciseEvaluation').val(100 - totalPoints);
+
+        });
+
+
+        $('.numberbox').keyup(function () {
+            if ($(this).val() > 100) {
+                alert("No numbers above 100!");
+                $(this).val('100');
+            }
+        });
+
+    </script>
+    <script>
+        var ConfirmDelete = function (evaluationId) {
+            $("#hiddenEvaluationId").val(evaluationId);
+            $("#myModal").modal('show');
+        }
+
+        var DeleteSubject = function () {
+            var evaluationId = $("#hiddenEvaluationId").val();
+            $.ajax({
+                type: "POST",
+                url: "/Classes/DeleteEvaluation",
+                data: { evaluationId: evaluationId },
+                success: function (result) {
+                    $("#myModal").modal("hide");
+                    $("#evaluation_" + evaluationId).remove();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                },
+                error: function (xhr) {
+                    $("#myModal").modal("hide");
+                }
+            })
+        }
+    </script>
+    <script>
+        var Edit = function (evaluationId, evaluationName, evaluationPercentage) {
+            $('#evaluationId').val(evaluationId);
+            $('#evaluationName').val(evaluationName);
+            $('#evaluationPercentage').val(evaluationPercentage);
+            $('#oldEvaluationPercentage').val(evaluationPercentage);
+            $('#evaluationPercentage').attr({
+                "max": evaluationPercentage
+            });
+            $('#editModal').modal('show');
+        }
+
+        var EditEvaluation = function () {
+            var evaluationId = $('#evaluationId').val();
+            var evaluationName = $('#evaluationName').val();
+            var evaluationPercentage = $('#evaluationPercentage').val();
+            var oldEvaluationPercentage = $('#oldEvaluationPercentage').val();
+
+            var isFine = true;
+
+            var totalPoints = parseInt($('#totalPoints').val());
+            console.log(totalPoints - oldEvaluationPercentage);
+            console.log((totalPoints - oldEvaluationPercentage) + parseInt(evaluationPercentage));
+            if ((totalPoints - oldEvaluationPercentage) + parseInt(evaluationPercentage) > 100) {
+                isFine = false;
+                alert("You can't add more percentage if total points is 100%.");
+                var evaluationPercentage = $('#evaluationPercentage').val(oldEvaluationPercentage);
+            }
+            if (isFine) {
+                var fdata = new FormData();
+                fdata.append("EvaluationId", evaluationId);
+                fdata.append("Name", evaluationName);
+                fdata.append("Percentage", evaluationPercentage);
+                $.ajax({
+                    url: "/Classes/EditEvaluation",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: fdata,
+                    success: function (result) {
+                        $("#editModal").modal("hide");
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
+
+                    },
+                    error: function (xhr) {
+                        alert('Evaluation could not be updates due to an error in server!');
+                        console.log(xhr);
+                    }
+                })
+            }
+        }
+    </script>
+}

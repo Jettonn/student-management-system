@@ -1,0 +1,215 @@
+﻿@model SMS.Application.ViewModels.Classes.ClassViewModel
+@using SMS.Application.Enum
+@{
+    ViewData["Title"] = "NewClass";
+}
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item"><a class="text-muted">Class</a></li>
+            <li class="breadcrumb-item active" aria-current="page">New class</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 margin_left15px">
+                    <h4 class="text-maincolor">New class</h4>
+                </div>
+                <form method="post" asp-controller="Classes" asp-action="AddClass" class="formWidth_100">
+                    <div class="col-md-12 pt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="className">Class name</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="className" placeholder="Enter Class name" asp-for="ClassName" required readonly>
+                                        <small class="text-muted">Class name will be automatically generated after you select Subject</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="comment">Comment</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <textarea class="form-control rounded-0" id="comment" rows="3" placeholder="Enter class comment" asp-for="ClassComment"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="subject">Subject</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <select class="browser-default custom-select" asp-items="Model.Subjects" asp-for="Subject" required id="selectedSubject">
+                                                    <option selected="" value="-1">Please select one</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="classHours">Class hours</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="number" class="form-control" id="classHours" min="0" max="100" value="30" asp-for="ClassHours" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-8 vertical_align_text"><h5>Class evaluation</h5></div>
+                                <div class="col-md-4 position_end">
+                                    <div class="col-md-6 p-0">
+                                        <div class="card text-white bg-dark p-2 center_all">
+                                            <p style="font-size:14px; margin-bottom:0"><span id="totalPoints"></span>/100 points</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="exam">Name</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="exam" placeholder="Exam" readonly asp-for="ExamEvaluation">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="examEvaluation">Percentage</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="number" class="form-control numberbox" id="examEvaluation" min="0" max="100" value="80" asp-for="ExamEvaluationPercentage" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="attendance">Name</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="attendance" placeholder="Attendance" readonly asp-for="AttendanceEvaluation">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="attendanceEvaluation">Percentage</label>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="number" class="form-control numberbox" id="attendanceEvaluation" min="0" max="100" value="5" asp-for="AttendanceEvaluationPercentage" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Other evaluations!</strong> You can add other evaluations afer you create this class.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 margin_left15px">
+                        <button type="submit" class="btn btn-outline-dark">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            var examEvaluation = parseInt($('#examEvaluation').val());
+            var attendanceEvaluation = parseInt($('#attendanceEvaluation').val());
+            $('#totalPoints').html(attendanceEvaluation + examEvaluation);
+        });
+
+        $('.numberbox').keyup(function () {
+            if ($(this).val() > 100) {
+                alert("No numbers above 100");
+                $(this).val('100');
+            }
+        });
+
+        $('#examEvaluation').change(function () {
+            var examEvaluation = parseInt($('#examEvaluation').val());
+            var attendanceEvaluation = parseInt($('#attendanceEvaluation').val());
+
+            if (attendanceEvaluation + examEvaluation > 100) {
+                alert("The sum of Exam percentage and Attendance percantage can't be greater than 100!");
+                $('#examEvaluation').val(100 - attendanceEvaluation);
+                $('#totalPoints').html(100);
+            } else {
+                $('#examEvaluation').val(examEvaluation);
+                $('#totalPoints').html(attendanceEvaluation + examEvaluation);
+            }
+        });
+
+        $('#attendanceEvaluation').change(function () {
+            var examEvaluation = parseInt($('#examEvaluation').val());
+            var attendanceEvaluation = parseInt($('#attendanceEvaluation').val());
+
+            if (attendanceEvaluation + examEvaluation > 100) {
+                alert("The sum of Exam percentage and Attendance percantage can't be greater than 100!");
+                $('#attendanceEvaluation').val(100 - examEvaluation);
+                $('#totalPoints').html(100);
+            } else {
+                $('#attendanceEvaluation').val(attendanceEvaluation);
+                $('#totalPoints').html(attendanceEvaluation + examEvaluation);
+            }
+        });
+
+        $('#selectedSubject').change(function () {
+            var subjectName = $('#selectedSubject option:selected').text();
+            var currentTime = new Date();
+            var currentYear = currentTime.getFullYear();
+            var currentMonth = currentTime.getMonth();
+
+
+            if (currentMonth >= 7 && currentMonth <= 12) {
+                var currentYearPlusOne = currentYear + 1;
+                $('#className').val(subjectName + " - " + currentYear + "/" + currentYearPlusOne);
+            } else if (currentMonth >= 1 && currentMonth <= 6) {
+                var currentYearMinusOne = currentYear - 1;
+                $('#className').val(subjectName + " - " + currentYearMinusOne + "/" + currentYear);
+            }
+
+
+        });
+    </script>
+}
