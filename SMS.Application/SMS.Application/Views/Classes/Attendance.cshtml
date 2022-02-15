@@ -1,0 +1,104 @@
+﻿@model SMS.Application.ViewModels.Classes.AttendanceViewModel
+@{
+    ViewData["Title"] = "Attendance";
+}
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item active"><a asp-controller="Classes" asp-action="ShowAllClasses" class="text-muted">Classes</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Attendance</li>
+        </ul>
+    </div>
+
+    <div class="">
+        <h3 class="text-dark">Attendances</h3>
+    </div>
+
+    <div class="card border-light shadow mb-3 bg-dark">
+        <div class="card-body text-white font-weight-bold">
+            <div class="row">
+                <div class="col-md-1">Nr.</div>
+                <div class="col-md-3">Comment</div>
+                <div class="col-md-2">Hours</div>
+                <div class="col-md-2">Date</div>
+                <div class="col-md-2 text-center">Attendance</div>
+                <div class="col-md-1 text-center">
+                    Action
+                </div>
+            </div>
+        </div>
+    </div>
+    @{
+        var attendanceNo = 1;
+        foreach (var attendance in Model.attendanceDtos)
+        {
+            <div class="card border-light shadow mb-3">
+                <div class="card-body">
+                    <div class="row vertical_align_text">
+                        <div class="col-md-1 text-muted">@attendanceNo</div>
+                        <div class="col-md-3">@attendance.Comment</div>
+                        <div class="col-md-2">@attendance.Hours hours</div>
+                        <div class="col-md-2">@attendance.Date</div>
+                        <div class="col-md-2">
+                            <canvas class="pie-chart" data-present="@attendance.Present" data-absent="@attendance.Absent"></canvas>
+                        </div>
+                        <div class="col-md-1 text-center">
+                            <a class="text-warning cursor_point" href="@Url.ActionLink("EditAttendance", "Classes", new { lessonId = attendance.LessonId })"><i class="fas fa-pen"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            attendanceNo++;
+        }
+    }
+
+    @*<div class="card border-light shadow mb-3">
+            <div class="card-body">
+                <div class="row vertical_align_text">
+                    <div class="col-md-1">1</div>
+                    <div class="col-md-3">Komentiiii</div>
+                    <div class="col-md-2">2</div>
+                    <div class="col-md-2">17/12/2020 10:10</div>
+                    <div class="col-md-2">
+                        <canvas class="pie-chart" data-present="30" data-absent="13"></canvas>
+                    </div>
+                    <div class="col-md-1">
+                        Action
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</div>
+@section Scripts {
+    <script>
+        $(".pie-chart").each(function (i) {
+            var absent = $(this).attr("data-absent");
+            var present = $(this).attr("data-present");
+            console.log(absent, present);
+            var ctx = $(this)[0].getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ["Absent", "Present"],
+                    datasets: [
+                        {
+                            label: "Attendance",
+                            backgroundColor: ["#dc3545", "#28a745"],
+                            data: [absent, present]
+                        }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: false,
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+        });
+    </script>
+}

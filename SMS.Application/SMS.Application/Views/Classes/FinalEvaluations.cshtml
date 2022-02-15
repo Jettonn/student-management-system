@@ -1,0 +1,115 @@
+﻿@model SMS.Application.ViewModels.Classes.FinalEvaluationViewModel
+@{
+    ViewData["Title"] = "FinalEvaluations";
+}
+
+@*Modal for evaluation*@
+<div class="modal fade" id="Evaluation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted">Evaluation Info</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="text-center col-md-12">
+                        <h4 class="card-title" id="studentName"><strong></strong></h4>
+                        <hr />
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <ul class="list-group list-group-flush mb-3 text-muted" style="font-size:18px;" id="evaluations">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for evaluation*@
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item active"><a asp-controller="Classes" asp-action="ShowAllClasses" class="text-muted">Classes</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Final Evaluation</li>
+        </ul>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h3 class="text-dark">Final Evaluation</h3>
+        </div>
+        <div class="col-md-6 position_end">
+            <a class="btn btn-success" href="@Url.ActionLink("FinalEvaluationCsv", "Classes", new { classId = Model.ClassId })"><i class="far fa-file-excel"></i> Excel</a>
+        </div>
+
+    </div>
+    <div class="card border-light shadow mb-3 bg-dark">
+        <div class="card-body text-white font-weight-bold">
+            <div class="row">
+                <div class="col-md-3">Student</div>
+                <div class="col-md-3">Email</div>
+                <div class="col-md-3">Attendance</div>
+                <div class="col-md-3">Total points</div>
+            </div>
+        </div>
+    </div>
+    @{
+        foreach (var studentsInfo in Model.finalEvaluationStudents)
+        {
+            <div class="card border-light shadow mb-4 bg-white" id="class_@studentsInfo.StudentId">
+                <div class="card-body text-muted">
+                    <div class="row">
+                        <div class="col-md-3">@studentsInfo.Student</div>
+                        <div class="col-md-3">@studentsInfo.Email</div>
+                        <div class="col-md-3">@studentsInfo.Attendance / @Model.ClassAttendance hours</div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+                                    @studentsInfo.TotalPoints
+                                </div>
+                                <div class="col-md-6 position_end">
+                                    <a class="text-primary cursor_point" onclick='Evaluation("@studentsInfo.Student","@Model.ClassId","@studentsInfo.StudentId")'><i class="fas fa-info-circle fa-lg"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    }
+</div>
+@section Scripts {
+    <script>
+        var Evaluation = function (studentName, classId, studentId) {
+            $('#Evaluation').modal("show");
+            $('#studentName').html(studentName);
+
+            $.ajax({
+                url: '/Classes/GetStudentEvaluations',
+                data: { classId: classId, studentId: studentId },
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    $("#evaluations").empty();
+                    for (var i = 0; i < data.studentEvaluationDtos.length; i++) {
+                        $("#evaluations").append('<li class="list-group-item">' + data.studentEvaluationDtos[i].evaluationName + ": " + data.studentEvaluationDtos[i].evaluationPoints + " of " + data.studentEvaluationDtos[i].evaluationPercetange + ' points</li>');
+                    }
+                },
+                error: function (response) {
+                    alert(response.error);
+                }
+            });
+
+        }
+
+        $(document).keydown(function (event) {
+            if (event.keyCode == 27) {
+                $('#Evaluation').modal('hide');
+            }
+        });
+    </script>
+}

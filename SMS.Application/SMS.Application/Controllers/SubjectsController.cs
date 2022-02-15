@@ -35,6 +35,10 @@ namespace SMS.Application.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> NewSubject(NewSubjectViewModel model)
         {
             try

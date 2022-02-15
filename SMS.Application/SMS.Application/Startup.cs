@@ -50,6 +50,7 @@ namespace SMS.Application
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<ISubjectsViewService, SubjectsService>();
             services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<ILessonViewService, LessonViewService>();
             services.AddMvc().AddNToastNotifyToastr(new ToastrOptions()
             {
                 ProgressBar = false,

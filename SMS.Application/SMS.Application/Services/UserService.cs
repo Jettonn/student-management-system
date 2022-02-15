@@ -55,5 +55,21 @@ namespace SMS.Application.Services
 
             return user;
         }
+
+        public void ChangePassword(ChangePasswordViewModel model)
+        {
+            try
+            {
+                var rsaEncryption = new RSAEncryption();
+                var user = professorRepository.GetById(model.UserId);
+                user.Password = rsaEncryption.EncryptRSA(model.ConfirmNewPassword);
+                professorRepository.Save();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

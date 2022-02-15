@@ -36,6 +36,7 @@
                                         <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Classes</a>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" asp-controller="Classes" asp-action="NewClass">Add new class</a>
+                                            <a class="dropdown-item" asp-controller="Classes" asp-action="Evaluations">Evaluations</a>
                                             <a class="dropdown-item" asp-controller="Classes" asp-action="ShowAllClasses">Show all</a>
                                         </div>
                                     </li>
@@ -52,6 +53,7 @@
                                     <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                                         <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-lg"> <i class="fas fa-chevron-down fa-xs"></i></i></a>
                                         <div class="dropdown-menu">
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="ChangePassword">Change password</a>
                                             <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Log Out</a>
                                         </div>
                                     </li>

@@ -1,0 +1,150 @@
+﻿@model SMS.Application.ViewModels.Classes.EvaluationsViewModel
+@using SMS.Application.Enum
+@{
+    ViewData["Title"] = "Evaluations";
+}
+
+@*Modal for selecting evaluation*@
+<div class="modal fade" id="selectEvaluation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted">Select evaluation</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="text-center col-md-12">
+                        <h4 class="card-title" id="className"><strong></strong></h4>
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <form asp-controller="Classes" asp-action="EvaluateProject" method="post" class="formWidth_100">
+                        @*<div class="form-group" style="visibility:hidden; display:none;">
+                                <input asp-for="startLesson.ClassId" id="classId" class="form-control" />
+                            </div>*@
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="subject">Select evaluation:</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <select class="browser-default custom-select" required id="ClassEvaluations" name="classEvaluationId">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-light" data-dismiss="modal">Cancel</a>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i> Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for selecting evaluation*@
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item">Classes</li>
+            <li class="breadcrumb-item active" aria-current="page">Evaluations</li>
+        </ul>
+    </div>
+    <div class="mb-3">
+        <h3 class="text-dark">Select a class to evaluate exam or projects</h3>
+    </div>
+    <hr />
+    <div class="row">
+        @{
+            foreach (var classInfo in Model.evaluationInfo)
+            {
+                <div class="col-md-4 mb-3" id="classCard_@classInfo.ClassId">
+                    <div class="card border-light mb-3" @*style="box-shadow:-0.5rem 1.3rem 2rem @(classInfo.Color) !important;"*@>
+                        <div class="card-body card-body-cascade text-center">
+                            <h4 class="card-title"><strong>@classInfo.ClassName</strong></h4>
+                            <h6 class="text-muted pb-2"><strong>@classInfo.SubjectName</strong></h6>
+                            <p class="card-text">@classInfo.Comment</p>
+                            <ul class="list-group list-group-flush mb-3 text-muted" style="font-size:13px;">
+                                <li class="list-group-item">Projects: @classInfo.NumberOfProjects</li>
+                            </ul>
+                            <div class="position_end">
+                                <a class="btn btn-outline-dark" href="#" onclick='Evaluation("@classInfo.ClassName","@classInfo.ClassId")'>Select</a>
+                            </div>
+                            @*@if (@classInfo.NumberOfProjects == 0)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <small class="text-muted" style="font-size:12px;">This class don't have any project to evaluate</small>
+                                        </div>
+                                    </div>
+                                }
+                                else*@
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var Evaluation = function (className, classId) {
+            $('#selectEvaluation').modal("show");
+            $('#className').html(className);
+
+            $.ajax({
+                url: '/Classes/GetEvaluations',
+                data: { classId: classId },
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    var s;
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
+                    }
+                    $("#ClassEvaluations").html(s);
+                },
+                error: function (response) {
+                    alert(response.error);
+                }
+            });
+
+            // alert("Select dept is" + #EmployeePersonal_SelectedDepartment)
+        }
+    </script>
+    <script>
+        var EvaluateProject = function () {
+            var ClassEvaluationId = $('#ClassEvaluations').val();
+            var isOkay = true;
+            if (ClassEvaluationId == -1) {
+                isOkay = false;
+                alert("You have to choose one of the options");
+            }
+
+            if (isOkay) {
+                $.ajax({
+                    url: '/Classes/EvaluateProject',
+                    data: { classEvaluationId: ClassEvaluationId },
+                    type: 'Post',
+                    success: function (data) {
+
+                    },
+                    error: function (response) {
+                        alert(response.error);
+                    }
+                });
+            }
+        }
+    </script>
+}

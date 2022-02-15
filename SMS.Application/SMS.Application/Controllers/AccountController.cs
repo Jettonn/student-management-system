@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using SMS.Application.Dtos;
+using SMS.Application.Extensions;
 using SMS.Application.GenericRepository;
 using SMS.Application.Interfaces;
 using SMS.Application.Models;
@@ -147,6 +148,56 @@ namespace SMS.Application.Controllers
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("LoginOrRegister");
+        }
+
+        [Authorize]
+        public IActionResult ChangePassword()
+        {
+            var usernameLogged = HttpContext.User.Identity.Name;
+            var currentUser = professorRepository.GetSingleByCriteria(x => x.Username == usernameLogged);
+            var model = new ChangePasswordViewModel();
+            model.UserId = currentUser.ProfessorId;
+            return View(model);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> UpdatePassword(ChangePasswordViewModel model)
+        {
+            try
+            {
+                var usernameLogged = HttpContext.User.Identity.Name;
+                var currentUser = professorRepository.GetSingleByCriteria(x => x.Username == usernameLogged);
+                var rsaEncryption = new RSAEncryption();
+                if (!ModelState.IsValid)
+                {
+                    toastNotification.AddErrorToastMessage("All fields are required!", new ToastrOptions() { CloseButton = true, ProgressBar = true, PositionClass = "toast-bottom-right", PreventDuplicates = true });
+                    return View("ChangePassword");
+                }
+                if (model.CurrentPassword != rsaEncryption.DecryptRSA(currentUser.Password))
+                {
+                    toastNotification.AddErrorToastMessage("The current password isn't correct!", new ToastrOptions() { CloseButton = true, ProgressBar = true, PositionClass = "toast-bottom-right", PreventDuplicates = true });
+                    return View("ChangePassword");
+                }
+                if (model.NewPassword == rsaEncryption.DecryptRSA(currentUser.Password))
+                {
+                    toastNotification.AddWarningToastMessage("New password can't be the same as old password!", new ToastrOptions() { CloseButton = true, ProgressBar = true, PositionClass = "toast-bottom-right", PreventDuplicates = true });
+                    return View("ChangePassword");
+                }
+                if (model.ConfirmNewPassword != model.NewPassword)
+                {
+                    toastNotification.AddErrorToastMessage("Confirm password and Password should be the same to change!", new ToastrOptions() { CloseButton = true, ProgressBar = true, PositionClass = "toast-bottom-right", PreventDuplicates = true });
+                    return View("ChangePassword");
+                }
+                userService.ChangePassword(model);
+                toastNotification.AddSuccessToastMessage("Your password updated successfully!", new ToastrOptions() { CloseButton = true, ProgressBar = true, PositionClass = "toast-bottom-right", PreventDuplicates = true });
+                return View("ChangePassword");
+            }
+            catch (Exception)
+            {
+
+                toastNotification.AddErrorToastMessage("An error occured!", new ToastrOptions() { CloseButton = true, ProgressBar = true, PositionClass = "toast-bottom-right", PreventDuplicates = true });
+                return View("ChangePassword");
+            }
         }
     }
 }

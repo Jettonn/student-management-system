@@ -1,0 +1,100 @@
+﻿@model SMS.Application.ViewModels.Classes.EvaluateProjectViewModel;
+@{
+    ViewData["Title"] = "EvaluateProject";
+}
+
+
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Classes" asp-action="Evaluations" class="text-muted">Evaluations</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Evaluate</li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-4"><h3 class="text-dark">Evaluate "@Model.ProjectName"</h3></div>
+        <div class="col-md-8">
+            <div class="alert alert-warning alert-dismissible fade show mb-0" role="alert">
+                <strong>Auto save points!</strong> Points are saved automatically when you edit.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="card border-light shadow mb-3 bg-dark">
+        <div class="card-body text-white font-weight-bold">
+            <div class="row">
+                <div class="col-md-1">Nr.</div>
+                <div class="col-md-3">Students name</div>
+                <div class="col-md-4">Email</div>
+                <div class="col-md-4">Points</div>
+            </div>
+        </div>
+    </div>
+    @{
+        var studentNo = 1;
+        foreach (var exercise in Model.evaluationInfos)
+        {
+            <div class="card border-light shadow mb-3">
+                <div class="card-body">
+                    <div class="row vertical_align_text">
+                        <div class="col-md-1">@studentNo</div>
+                        <div class="col-md-3">@exercise.FullName</div>
+                        <div class="col-md-4">@exercise.Email</div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4 vertical_align_text">
+                                    <p class="m-0">Points:</p>
+                                </div>
+                                <div class="col-md-4 px-md-0">
+                                    <div class="form-group mb-0">
+                                        <input type="number" class="form-control" id="points_@exercise.StudentId" min="0" max="@Model.ProjectPoints" required value="@exercise.EvaluationPoints" onchange='EditExerciseEvaluation("@exercise.EvaluationId","@exercise.StudentId","@Model.ProjectPoints","@exercise.EvaluationPoints")' step="any">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 vertical_align_text">
+                                    <p class="m-0"><span class="text-muted">of</span> @Model.ProjectPoints</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            studentNo++;
+        }
+    }
+</div>
+
+@section Scripts{
+    <script>
+        var EditExerciseEvaluation = function (evaluationId, studentId, exercisePoints, evaluationPoint) {
+            var evaluationPoints = parseInt($('#points_' + studentId).val());
+            var isOkay = true;
+            if (evaluationPoints > parseInt(exercisePoints)) {
+                isOkay = false;
+                alert("The max value is " + exercisePoints);
+                $('#points_' + studentId).val(evaluationPoint);
+            }
+            if (isOkay) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Classes/EditExerciseEvaluation",
+                    data: { evaluationId: evaluationId, evaluationPercentage: evaluationPoints },
+                    success: function (result) {
+                        //setTimeout(() => {
+                        //    location.reload();
+                        //}, 2000);
+                    },
+                    error: function (xhr) {
+                        alert('An error occured in server!');
+                    }
+                })
+            }
+
+        }
+    </script>
+}
+

@@ -11,5 +11,6 @@ namespace SMS.Application.Interfaces
     {
         void AddNewUser(AccountViewModel model);
         Professor Authenticate(string username, string password);
+        void ChangePassword(ChangePasswordViewModel model);
     }
 }
