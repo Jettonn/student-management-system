@@ -1,0 +1,120 @@
+﻿@model SMS.Application.ViewModels.Lesson.LessonViewModel
+@using SMS.Application.Enum
+
+@{
+    ViewData["Title"] = "StartLesson";
+    var today = DateTime.Now;
+}
+
+@*Modal for Lesson Start*@
+<div class="modal fade" id="startLessonModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted">Start Lesson</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                @*hidden field for storing current subjectId*@
+                <input type="hidden" id="hiddenEvaluationId" />
+                <div class="row" id="otherExercises">
+                    <div class="text-center col-md-12">
+                        <h4 class="card-title" id="className"><strong></strong></h4>
+                        <h6 class="text-muted pb-2" id="classSubject"><strong></strong></h6>
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <form method="post" asp-controller="Lesson" asp-action="Start" class="formWidth_100">
+                        <div class="form-group" style="visibility:hidden; display:none;">
+                            <input asp-for="startLesson.ClassId" id="classId" class="form-control" />
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="lessonComment">Comment</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <textarea type="text" class="form-control" id="evaluationName" asp-for="startLesson.Comment"></textarea>
+                                    <small class="text-muted">Enter some details for this lesson (not required)</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="lessonHours">Hours</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <input type="number" class="form-control numberbox" min="1" max="5" required value="1" asp-for="startLesson.Hours">
+                                    <small class="text-muted">Select the number of hours you are going to take attendance!</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="lessonHours">Date & Time</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="datetime-local" value="@today" id="example-datetime-local-input" asp-for="startLesson.Date">
+                                    <small class="text-muted">Select the date you want to save the attendance!</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-light" data-dismiss="modal">Cancel</a>
+                            <button type="submit" class="btn btn-success">Start</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for Lesson Start*@
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Start Lesson</li>
+        </ul>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12 mb-3">
+            <h3 class="text-dark">Select class</h3>
+        </div>
+        @{
+            foreach (var classData in Model.lessonDto)
+            {
+                <div class="col-md-4 mb-4" id="class_@classData.ClassId">
+                    <div class="card border-light mb-3" style="box-shadow:-0.5rem 1.3rem 2rem @(classData.SubjectColor) !important;">
+                        <div class="card-body card-body-cascade text-center">
+                            <h4 class="card-title"><strong>@classData.ClassName</strong></h4>
+                            <h6 class="text-muted pb-2"><strong>@classData.SubjectName</strong></h6>
+                            <p class="card-text">@classData.ClassComment</p>
+                            <ul class="list-group list-group-flush mb-3 text-muted" style="font-size:13px;">
+                                <li class="list-group-item">Hours left: @classData.PlannedHours</li>
+                                <li class="list-group-item">Year of studies: @((YearOfStudiesShow)classData.StudiesYear)</li>
+                            </ul>
+                            <div class=" position_end">
+                                <a onclick='Lesson("@classData.ClassId","@classData.ClassName","@classData.SubjectName")' class="btn btn-outline-dark cursor_point">Start <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+@section Scripts{
+    <script>
+        var Lesson = function (classId, className, classSubject) {
+            $('#startLessonModal').modal("show");
+            $('#className').html(className);
+            $('#classSubject').html(classSubject);
+            $('#classId').val(classId);
+        }
+    </script>
+}

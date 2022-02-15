@@ -1,0 +1,138 @@
+﻿@model SMS.Application.ViewModels.Lesson.OnlineLessonViewModel
+@using SMS.Application.Enum
+@{
+    ViewData["Title"] = "OnlineLesson";
+}
+
+@*Modal for finish*@
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted">Finish Lesson</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to finish this Lesson?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-light" data-dismiss="modal">Cancel</a>
+                <a class="btn btn-success" asp-controller="Home" asp-action="Index">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+@*Modal for finish*@
+
+<div class="container">
+    <div class="col-md-12 pl-0">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item"><a class="text-muted">Start Lesson</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Online Lesson</li>
+        </ul>
+    </div>
+    <div class="col-md-12 center_all">
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <h4 class="text-maincolor text-center"><strong>@Model.ClassName</strong></h4>
+                                <h4 class="text-maincolor text-center"><strong> Attendance</strong></h4>
+                            </div>
+                            <div class="col-md-12">
+                                <h6 class="text-muted text-center">@Model.ClassComment</h6>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <p class="text-muted mb-0"><strong>@Model.SubjectName</strong></p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <p class="text-muted mb-0" style="font-size:14px;">Date: @Model.LessonDate</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+                        </div>
+                        @{
+                            foreach (var attendanceData in Model.attendanceViewModels)
+                            {
+                                <div class="col-md-12">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-9 vertical_align_text">
+                                                <h5 class="">@attendanceData.StudentName</h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="custom-radios row">
+                                                    <div>
+                                                        <input type="radio" class="color-1" value="@((int)AttendanceType.Present)" asp-for="@attendanceData.AttendanceStatus" id="present_@attendanceData.AttendanceId" name="attendance_@attendanceData.AttendanceId" onclick='EditStudentAttendance("@attendanceData.AttendanceId","@((int)AttendanceType.Present)")'>
+                                                        <label for="present_@attendanceData.AttendanceId">
+                                                            <span>
+                                                                <a>
+                                                                    <i class="fas fa-check text-white"></i>
+                                                                </a>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" class="color-4" value="@((int)AttendanceType.Absent)" asp-for="@attendanceData.AttendanceStatus" id="absent_@attendanceData.AttendanceId" name="attendance_@attendanceData.AttendanceId" onclick='EditStudentAttendance("@attendanceData.AttendanceId","@((int)AttendanceType.Absent)")'>
+                                                        <label for="absent_@attendanceData.AttendanceId">
+                                                            <span>
+                                                                <a>
+                                                                    <i class="fas fa-check text-white"></i>
+                                                                </a>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-outline-primary" onclick="FinishLesson()">Finish</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var EditStudentAttendance = function (attendanceId, attendanceStatus) {
+            $.ajax({
+                type: "POST",
+                url: "/Lesson/EditStudentAttendance",
+                data: { attendanceId: attendanceId, attendanceStatus: attendanceStatus },
+                success: function (result) {
+                },
+                error: function (xhr) {
+                    alert('Evaluation could not deleted due to an error in server!');
+                }
+            })
+        }
+
+        var FinishLesson = function () {
+            $("#myModal").modal('show');
+        }
+    </script>
+}
